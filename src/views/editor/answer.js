@@ -1,4 +1,4 @@
-import {html, render} from '../../lib.js';
+import { html, render } from '../../lib.js';
 
 const tempate = (answers, questionIndex, correctIndex, addAnswer) => html`
     ${answers.map((x, i) => radioEdit(x, questionIndex, i, correctIndex == i, addAnswer))}
@@ -21,24 +21,35 @@ const radioEdit = (answer, questionIndex, index, isChecked, addAnswer) => html`
     <button data-index=${index} class="input submit action"><i class="fas fa-trash-alt"></i></button>
 </div>`;
 
-export function createAnswerList(answers, questionIndex, correctIndex) {
-    const current = answers.slice();
-
+export function createAnswerList(data, questionIndex) {
+    const answers = data.answers;
     const element = document.createElement('div');
     element.addEventListener('click', onDelete);
+    element.addEventListener('change', onChange);
 
     update();
 
     return element;
 
     function update() {
-        render(tempate(current, questionIndex, correctIndex, addAnswer), element);
+        render(tempate(data.answers, questionIndex, data.correctIndex, addAnswer), element);
     }
 
     function addAnswer(e) {
         e.preventDefault();
-        current.push('');
+        answers.push('');
         update();
+    }
+
+    function onChange(e) {
+        if (e.target.getAttribute('type') == 'text') {
+            const index = Number(e.target.name.split('-')[1]);
+            answers[index] = e.target.value || '';
+        }
+        else {
+            data.correctIndex = Number(e.target.value);
+        }
+
     }
 
     function onDelete(e) {
@@ -50,7 +61,7 @@ export function createAnswerList(answers, questionIndex, correctIndex) {
         const selectedIndex = target.dataset.index;
         if (selectedIndex != undefined) {
             e.preventDefault();
-            current.splice(selectedIndex, 1);
+            answers.splice(selectedIndex, 1);
             update();
         }
     }

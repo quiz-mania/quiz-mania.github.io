@@ -1,5 +1,6 @@
-import { createQuestion } from './question.js';
-import { html } from '../../lib.js'
+
+import { html } from '../../lib.js';
+import {createList} from './list.js';
 
 const template = (questions) => html`
 <section id="editor">
@@ -30,26 +31,11 @@ const template = (questions) => html`
         <h2>Questions</h2>
     </header>
 
-    ${questionList(questions)}
+    ${createList(questions)}
 
 </section>`;
 
-const questionList = (questions) => html`
 
-<div class="pad-large alt-page">
-
-    ${questions.map((x, i) => createQuestion(x, false ,i + 1))}
-
-    <article class="editor-question">
-        <div class="editor-input">
-            <button class="input submit action">
-                <i class="fas fa-plus-circle"></i>
-                Add question
-            </button>
-        </div>
-    </article>
-
-</div>`;
 
 const questions = [
     {

@@ -33,9 +33,16 @@
     float: right;
 }
 
+.editor-input-view {
+    position: relative;
+    margin: 8px 0;
+}
+
 .editor-input {
     position: relative;
     margin: 8px 0;
+    display: flex;
+    justify-content: space-between;
 }
 
 .editor-text {
