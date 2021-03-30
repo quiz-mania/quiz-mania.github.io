@@ -8,12 +8,14 @@ import { quizPage } from './views/quiz/quiz.js';
 import { cube } from './views/common/loader.js';
 import { resultPage } from './views/quiz/result.js';
 import { detailsPage } from './views/quiz/details.js';
+import { welcomePage } from './views/welcome.js';
 
 const state = {};
 const main = document.getElementById('content');
 setUserNav();
 document.getElementById('logoutBtn').addEventListener('click', logout);
 
+page('/', decorateContext, welcomePage)
 page('/browse', decorateContext, browsePage);
 page('/login', decorateContext, loginPage);
 page('/register', decorateContext, registerPage);
