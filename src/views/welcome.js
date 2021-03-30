@@ -1,5 +1,5 @@
 import { html , styleMap, topics} from '../lib.js';
-import { getQuizes, getAllSolutions, getQuizById} from '../api/data.js'
+import { getQuizes, getSolutionsByQuizId, getQuizById} from '../api/data.js'
 
 const template = (style, topicsCount, quizesCount, mostPopularQuizSolutions, mostPopularQuiz) => html`
 <section id="welcome">
@@ -47,20 +47,11 @@ export async function welcomePage(ctx) {
     }
 
     const topicsCount = [...Object.entries(topics)].length;
-    const quizesCount = (await getQuizes()).length;
-    const quizes = [...await getAllSolutions()].reduce((a, s) => {
-        if (a[s.quiz.objectId]) {
-            a[s.quiz.objectId].count += 1;
-        }
-        else{
-            a[s.quiz.objectId] = s.quiz;
-            a[s.quiz.objectId].count = 1;
-        }
-        return a;
-    }, {});
-
-    const quiz = [...Object.values(quizes)].sort((a,b) => b.count - a.count)[0];
+    const allQuizes = await getQuizes();
+    const quizesCount = allQuizes.length;
+    const quiz = allQuizes.sort((a,b) => b.createdAt.localeCompare(a.createdAt))[0];
     const quizId = quiz.objectId;
     const mostPopularQuiz = await getQuizById(quizId);
-    ctx.render(template(style, topicsCount, quizesCount, quiz.count, mostPopularQuiz));
+    const solutionsCount = [...await getSolutionsByQuizId(quizId)].length;
+    ctx.render(template(style, topicsCount, quizesCount, solutionsCount, mostPopularQuiz));
 }
