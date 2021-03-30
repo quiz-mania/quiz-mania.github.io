@@ -73,6 +73,11 @@ export async function deleteQuestion(id) {
 
 
 // Solution Collection
+export async function getAllSolutions() {
+    const response  = await api.get(host + '/classes/Solution');
+    return response.results;
+}
+
 export async function getSolutionsByUserId(userId) {
     const query = JSON.stringify({ owner: createPointer('_User', userId) });
     const response  = await api.get(host + '/classes/Solution?where=' + encodeURIComponent(query));

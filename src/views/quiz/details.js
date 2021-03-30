@@ -1,7 +1,7 @@
-import { html } from "../../lib.js";
+import { html, styleMap } from "../../lib.js";
 import { getSolutionsByQuizId, getQuizById } from '../../api/data.js';
 
-const template = (onClick, quizDetails, solutionsCount) => html`
+const template = (onClick, quizDetails, solutionsCount, style) => html`
 <section id="details">
     <div class="pad-large alt-page">
         <article class="details">
@@ -16,6 +16,7 @@ const template = (onClick, quizDetails, solutionsCount) => html`
 
             <div>
                 <a @click=${onClick} class="cta action" href="javascript:void(0)" >Begin Quiz</a>
+                <a style=${style} class="cta action" href="/edit/${quizDetails.objectId}" >Edit Quiz</a>
             </div>
 
         </article>
@@ -28,7 +29,17 @@ export async function detailsPage(ctx) {
     const quizId = ctx.params.id;
     const solutionsCount = (await getSolutionsByQuizId(quizId)).length;
     const quizDetails = await getQuizById(quizId);
-    ctx.render(template(onClick, quizDetails, solutionsCount));
+    const style = {
+        display: 'none'
+    }
+    
+    if (quizDetails.owner.objectId == sessionStorage.getItem('userId')) {
+        style.display = 'block'
+    }
+
+    ctx.render(template(onClick, quizDetails, solutionsCount, style));
+
+    
 
     function onClick(){
         if (isLogedIn) {

@@ -43,7 +43,7 @@ const viewTemplate = (data, index, onEdit, onDelete) => html`
 </div>`;
 
 const radioView = (value, checked) => html`
-<div class="editor-input">
+<div class="editor-input-view">
     <label class="radio">
         <input class="input" type="radio" disabled ?checked=${checked} />
         <i class="fas fa-check-circle"></i>
