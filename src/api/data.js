@@ -80,7 +80,7 @@ export async function getSolutionsByUserId(userId) {
 }
 
 export async function getSolutionsByQuizId(quizId) {
-    const query = JSON.stringify({ owner: createPointer('Quiz', quizId) });
+    const query = JSON.stringify({ quiz: createPointer('Quiz', quizId) });
     const response  = await api.get(host + '/classes/Solution?where=' + encodeURIComponent(query));
     return response.results;
 }

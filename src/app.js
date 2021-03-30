@@ -7,6 +7,7 @@ import { loginPage, registerPage } from './views/auth.js';
 import { quizPage } from './views/quiz/quiz.js';
 import { cube } from './views/common/loader.js';
 import { resultPage } from './views/quiz/result.js';
+import { detailsPage } from './views/quiz/details.js';
 
 const state = {};
 const main = document.getElementById('content');
@@ -20,6 +21,7 @@ page('/quiz/:id', decorateContext, getQuiz, quizPage);
 page('/summary/:id', decorateContext, getQuiz, resultPage);
 page('/create', decorateContext, editorPage);
 page('/edit/:id', decorateContext, editorPage);
+page('/details/:id', decorateContext, detailsPage)
 
 page.start();
 
@@ -48,6 +50,7 @@ function clearCache(quizId) {
 function decorateContext(ctx, next) {
     ctx.render = (content) => render(content, main);
     ctx.setUserNav = setUserNav;
+    ctx.redirect = (destination) => page.redirect(destination);
     next();
 }
 
