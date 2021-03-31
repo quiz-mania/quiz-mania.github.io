@@ -16,7 +16,7 @@ const template = (onClick, quizDetails, solutionsCount, style) => html`
 
             <div>
                 <a @click=${onClick} class="cta action" href="javascript:void(0)" >Begin Quiz</a>
-                <a style=${style} class="cta action" href="/edit/${quizDetails.objectId}" >Edit Quiz</a>
+                <a style=${styleMap(style)} class="cta action" href="/edit/${quizDetails.objectId}" >Edit Quiz</a>
             </div>
 
         </article>
@@ -30,17 +30,11 @@ export async function detailsPage(ctx) {
     const solutionsCount = (await getSolutionsByQuizId(quizId)).length;
     const quizDetails = await getQuizById(quizId);
     const style = {
-        display: 'none'
+        display: (sessionStorage.getItem('userId') != null && quizDetails.owner.objectId == sessionStorage.getItem('userId')) ? 'block' : 'none'
     }
     
-    if (quizDetails.owner.objectId == sessionStorage.getItem('userId')) {
-        style.display = 'block'
-    }
-
     ctx.render(template(onClick, quizDetails, solutionsCount, style));
-
     
-
     function onClick(){
         if (isLogedIn) {
             ctx.redirect(`/quiz/${quizId}`)
